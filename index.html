@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-      <link rel="icon" href="icon.png" type="image/png">
+        <link rel="icon" href="icon.png" type="image/png">
   <link rel="icon" type="image/png" href="icon.png">
   <link rel="apple-touch-icon"  href="icon.png">
 <title>Productivity Planner</title>
@@ -52,7 +52,7 @@ h1 { font-size: 28px; font-weight: 800; background: linear-gradient(90deg, #4f46
   background: var(--accent); border-radius: 3px; }
 
 .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--grid); }
-table { border-collapse: collapse; width: 100%; min-width: 1000px; }
+table { border-collapse: collapse; width: 100%; min-width: 1100px; }
 thead th { padding: 14px 6px; border-bottom: 2px solid var(--accent);
   font-size: 12px; text-align: center; color: var(--text2); background: var(--bg2); }
 .day-header { display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -60,7 +60,7 @@ thead th { padding: 14px 6px; border-bottom: 2px solid var(--accent);
 .day-name { font-size: 10px; color: var(--text2); text-transform: uppercase; }
 .today-marker { width: 6px; height: 6px; background: #ef4444;
   border-radius: 50%; margin-top: 2px; }
-.protocol-name { width: 300px; padding: 12px 16px; text-align: left;
+.protocol-name { width: 400px; padding: 12px 16px; text-align: left;
   font-weight: 600; font-size: 14px; background: var(--bg2);
   position: sticky; left: 0; border-right: 2px solid var(--accent); }
 .protocol-name input { width: 100%; border: none; background: transparent;
@@ -81,16 +81,10 @@ td.neutral { background: #fbbf24; color: white; border-color: #fbbf24; }
 .hour-label { font-size: 13px; font-weight: 700; color: var(--text);
   text-align: right; height: 28px; display: flex; align-items: center;
   justify-content: flex-end; padding-right: 8px; }
-.hour-label:nth-child(1) { color: #ef4444; }
-.hour-label:nth-child(2) { color: #f97316; }
-.hour-label:nth-child(3) { color: #f59e0b; }
-.hour-label:nth-child(4) { color: #84cc16; }
-.hour-label:nth-child(5) { color: #0ea5e9; }
-.hour-label:nth-child(6) { color: #8b5cf6; }
-.screen-grid { flex: 1; }
+.hour-label:nth-child(1) { color: #ef4444; } .hour-label:nth-child(2) { color: #f97316; } .hour-label:nth-child(3) { color: #f59e0b; } .hour-label:nth-child(4) { color: #84cc16; } .hour-label:nth-child(5) { color: #0ea5e9; } .hour-label:nth-child(6) { color: #8b5cf6; } .screen-grid { flex: 1; }
 .dates-row { display: flex; gap: 2px; margin-bottom: 12px;
   padding-left: 4px; border-bottom: 2px solid var(--grid); padding-bottom: 8px; }
-.date-cell { width: 32px; text-align: center; font-size: 12px;
+.date-cell { width: 36.5px; text-align: center; font-size: 12px;
   font-weight: 600; color: var(--text2); padding: 6px 0;
   position: relative; transition: 0.2s; }
 .date-cell.today { color: var(--text); font-weight: 800; }
@@ -99,7 +93,7 @@ td.neutral { background: #fbbf24; color: white; border-color: #fbbf24; }
   background: #ef4444; border-radius: 50%; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3); }
 .dots-grid { display: flex; flex-direction: column; gap: 26px; }
 .dots-row { display: flex; gap: 2px; align-items: center; }
-.dot { width: 32px; height: 28px; border: 2px solid var(--grid);
+.dot { width: 36.5px; height: 28px; border: 2px solid var(--grid);
   border-radius: 6px; cursor: pointer; transition: all 0.2s;
   background: var(--bg); }
 .dot:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
@@ -108,7 +102,11 @@ td.neutral { background: #fbbf24; color: white; border-color: #fbbf24; }
 .dot.today { border-color: #ef4444; }
 .graph-container { height: 140px; margin-top: 24px; border: 1px solid var(--grid);
   border-radius: var(--radius); padding: 16px; background: var(--bg);
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.05); }
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.05); position: relative; }
+.graph-tooltip { position: absolute; background: rgba(0,0,0,0.9); color: white;
+  padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 100;
+  white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
 .ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px; margin-top: 20px; }
@@ -202,7 +200,10 @@ td.neutral { background: #fbbf24; color: white; border-color: #fbbf24; }
         <div class="dots-grid" id="dotsContainer"></div>
       </div>
     </div>
-    <div class="graph-container"><canvas id="screenGraph"></canvas></div>
+    <div class="graph-container">
+      <canvas id="screenGraph"></canvas>
+      <div class="graph-tooltip" id="graphTooltip"></div>
+    </div>
   </div>
 
   <div class="grid-container">
@@ -210,11 +211,11 @@ td.neutral { background: #fbbf24; color: white; border-color: #fbbf24; }
     <div class="ach-grid">
       <div class="ach-item" data-idx="0">
         <div class="ach-dot" id="ach0"></div>
-        <div><strong>Consistency Master</strong><br><small>Complete all protocols for 7 consecutive days</small></div>
+        <div><strong>Consistency Master</strong><br><small>Complete all protocols for 25+ consecutive days</small></div>
       </div>
       <div class="ach-item" data-idx="1">
         <div class="ach-dot" id="ach1"></div>
-        <div><strong>Screen Time Control</strong><br><small>Keep screen time under 4h for 5 days in a row</small></div>
+        <div><strong>Screen Time Control</strong><br><small>Keep screen time under 4h for daily</small></div>
       </div>
       <div class="ach-item" data-idx="2">
         <div class="ach-dot" id="ach2"></div>
@@ -232,7 +233,7 @@ td.neutral { background: #fbbf24; color: white; border-color: #fbbf24; }
 <script>
 const DAYS = 31, ROWS = 10;
 const HOUR_LEVELS = ['2h','3h','4h','5h','6h','7h+'];
-const STORAGE_KEY = "planner_final";
+const STORAGE_KEY = "planner_ultimate";
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS_NAME = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
@@ -241,6 +242,8 @@ let state = {
   months: {},
   theme: "light"
 };
+
+let graphPoints = [];
 
 function init() {
   loadState();
@@ -265,8 +268,8 @@ function createMonth(key) {
     name: MONTHS[m-1] + " " + y,
     level: 1,
     protocols: Array.from({length:ROWS},(_,i)=>`Protocol ${i+1}`),
-    cells: {},
-    screen: Array(DAYS).fill(-1),
+    cells: {}, 
+    screen: Array(DAYS).fill(-1), 
     achievements: [false,false,false],
     createdAt: new Date().toISOString()
   };
@@ -325,7 +328,7 @@ function renderProtocols() {
 function toggleProtocol(r,d) {
   const key = `${r}_${d}`;
   const cm = currentMonth();
-  cm.cells[key] = ((cm.cells[key] || 0) + 1) % 4;
+  cm.cells[key] = ((cm.cells[key] || 0) + 1) % 4; 
   renderProtocols();
   updateStats();
   saveState();
@@ -392,56 +395,81 @@ function drawGraph() {
   
   ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
   ctx.lineWidth = 1;
-  for(let i=0; i<=5; i++) {
-    const y = 15 + (i/5)*h;
-    ctx.beginPath();
-    ctx.moveTo(30, y);
-    ctx.lineTo(30+w, y);
-    ctx.stroke();
-    
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text2');
-    ctx.font = "10px sans-serif";
-    ctx.fillText(`${5-i}h`, 15, y+3);
-  }
   
-  ctx.beginPath();
-  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, '#8b5cf6');
-  gradient.addColorStop(1, '#4f46e5');
-  ctx.strokeStyle = gradient;
-  ctx.lineWidth = 3;
-  ctx.lineJoin = 'round';
-  
+  graphPoints = [];
   for(let d=0; d<DAYS; d++) {
-    const x = 30 + (d/(DAYS-1))*w;
+    const x = 20 + (d/(DAYS-1))*w;
     const y = 15 + (1 - hours[d]/maxH)*h;
-    if(d===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    graphPoints.push({x, y, day: d, hour: hours[d]});
+    
+    if (d < DAYS-1) {
+      const nextX = 20 + ((d+1)/(DAYS-1))*w;
+      const nextY = 15 + (1 - hours[d+1]/maxH)*h;
+      
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(nextX, nextY);
+      ctx.stroke();
+    }
   }
-  ctx.stroke();
   
   const today = new Date();
   const isCurrentMonth = state.currentMonth === `${today.getFullYear()}-${today.getMonth()+1}`;
   
-  for(let d=0; d<DAYS; d++) {
-    const x = 30 + (d/(DAYS-1))*w;
-    const y = 15 + (1 - hours[d]/maxH)*h;
-    
+  graphPoints.forEach(point => {
     ctx.beginPath();
-    ctx.arc(x,y,6,0,Math.PI*2);
+    ctx.arc(point.x, point.y, 6, 0, Math.PI*2);
     ctx.fillStyle = '#ffffff';
     ctx.fill();
     ctx.strokeStyle = '#8b5cf6';
     ctx.lineWidth = 2;
     ctx.stroke();
     
-    if (isCurrentMonth && d+1 === today.getDate()) {
+    if (isCurrentMonth && point.day+1 === today.getDate()) {
       ctx.beginPath();
-      ctx.arc(x,y,10,0,Math.PI*2);
+      ctx.arc(point.x, point.y, 10, 0, Math.PI*2);
       ctx.strokeStyle = '#ef4444';
       ctx.lineWidth = 2;
       ctx.stroke();
     }
-  }
+  });
+  
+  setupGraphHover();
+}
+
+function setupGraphHover() {
+  const canvas = document.getElementById('screenGraph');
+  const tooltip = document.getElementById('graphTooltip');
+  
+  canvas.onmousemove = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    let hoveredPoint = null;
+    let minDistance = 15;
+    
+    for(const point of graphPoints) {
+      const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+      if(distance < minDistance) {
+        minDistance = distance;
+        hoveredPoint = point;
+      }
+    }
+    
+    if(hoveredPoint) {
+      tooltip.style.opacity = '1';
+      tooltip.style.left = (hoveredPoint.x + 10) + 'px';
+      tooltip.style.top = (hoveredPoint.y - 40) + 'px';
+      tooltip.textContent = `Day ${hoveredPoint.day+1}: ${hoveredPoint.hour}h`;
+    } else {
+      tooltip.style.opacity = '0';
+    }
+  };
+  
+  canvas.onmouseleave = () => {
+    tooltip.style.opacity = '0';
+  };
 }
 
 function renderAchievements() {
