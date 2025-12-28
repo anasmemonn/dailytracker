@@ -360,7 +360,7 @@ function renderProtocols() {
       const key = `${r}_${d}`;
       const status = cm.cells[key] || 0;
       const cls = status === 1 ? 'done' : status === 2 ? 'wrong' : status === 3 ? 'neutral' : '';
-      const symbol = status === 1 ? '✅' : status === 2 ? '❌' : status === 3 ? '○' : '';
+      const symbol = status === 1 ? '' : status === 2 ? '' : status === 3 ? '' : '';
       tbody += `<td class="cell ${cls}" onclick="toggleProtocol(${r},${d})">${symbol}</td>`;
     }
     tbody += '</tr>';
@@ -618,4 +618,5 @@ init();
 </script>
 </body>
 </html>
+
 
